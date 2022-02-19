@@ -13,44 +13,50 @@ global benefices
 
 def lecture_donnees():
     print("I don't want to :'(")
+    # TODO implement function for real
 
 
 # 3)
 
-def calcul_VAN(in_taux):
+def calcul_van(in_taux):
     if in_taux < 0:
         exit("calcul_VAN(): some error message")
 
-    VAN = investissement
+    van = investissement
     for i, benefice in enumerate(benefices):
-        VAN = VAN + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
+        van = van + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
 
-    VAN = VAN + (revente / pow(1 + in_taux, duree))
-    return VAN
+    van = van + (revente / pow(1 + in_taux, duree))
+    return van
 
 
 # 4)
 
 def init_dicho(in_epsilon):
-    t_m = t_M = 0.0
     print("not today!")
-    return t_m, t_M
+
+    in_t_max = in_t_min = 0.0
+    if in_epsilon >= 1.0:
+        exit("init_dicho(): some error message")
+
+    # TODO implement function for real
+    return in_t_max, in_t_min
 
 
 # 5)
 
-def dichotomie(in_t_m, in_t_M, in_epsilon):
+def dichotomie(in_t_max, in_t_min, in_epsilon):
     # all conditions will be verified by init_dicho
-    t_ri = t_c = VAN_c = 0.0
+    t_ri = 0.0
     arret = False
     while not arret:
-        t_c = (in_t_m + in_t_M) / 2
-        VAN_c = calcul_VAN(t_c)
-        if VAN_c >= in_epsilon:
-            in_t_m = t_c
+        t_c = (in_t_max + in_t_min) / 2
+        van_c = calcul_van(t_c)
+        if van_c >= in_epsilon:
+            in_t_max = t_c
         else:
-            if VAN_c <= -in_epsilon:
-                in_t_M = t_c
+            if van_c <= - in_epsilon:
+                in_t_min = t_c
             else:
                 t_ri = t_c
                 arret = True
@@ -61,4 +67,5 @@ def dichotomie(in_t_m, in_t_M, in_epsilon):
 # 6)
 
 def affichage_resultat(t_ri):
-    print("we'll figure something out...")
+    print("we'll figure something out..." + t_ri)
+    # TODO implement function for real
