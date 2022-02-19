@@ -1,13 +1,12 @@
 # 1)
-def init_var_glob():
-    # la durée considérée pour le projet, en années
-    global duree
-    # l'investissement, en début de projet
-    global investissement
-    # le prix de revente du matériel, en fin de projet
-    global revente
-    # les bénéfices réalisés en fin d'année
-    global benefices
+# la durée considérée pour le projet, en années
+global duree
+# l'investissement, en début de projet
+global investissement
+# le prix de revente du matériel, en fin de projet
+global revente
+# les bénéfices réalisés en fin d'année
+global benefices
 
 
 # 2)
@@ -27,6 +26,7 @@ def calcul_VAN(in_taux):
         VAN = VAN + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
 
     VAN = VAN + (revente / pow(1 + in_taux, duree))
+    return VAN
 
 
 # 4)
@@ -57,4 +57,8 @@ def dichotomie(in_t_m, in_t_M, in_epsilon):
 
     return t_ri
 
+
 # 6)
+
+def affichage_resultat(t_ri):
+    print("we'll figure something out...")
