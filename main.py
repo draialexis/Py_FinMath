@@ -13,6 +13,7 @@ global benefices
 
 def lecture_donnees():
     print("Looks like we're gonna need pandas")
+    # https://www.sitepoint.com/using-python-parse-spreadsheet-data/
     # TODO implement function for real
 
 
