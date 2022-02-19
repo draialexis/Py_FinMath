@@ -55,12 +55,11 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
         van_c = calcul_van(t_c)
         if van_c >= in_epsilon:
             in_t_max = t_c
+        elif van_c <= - in_epsilon:
+            in_t_min = t_c
         else:
-            if van_c <= - in_epsilon:
-                in_t_min = t_c
-            else:
-                t_ri = t_c
-                arret = True
+            t_ri = t_c
+            arret = True
 
     return t_ri
 
