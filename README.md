@@ -1,5 +1,5 @@
-# Py_FinMath
+# Py_FinMath: group 17
 
-Instructions: 
+[instructions.pdf](https://github.com/draialexis/Py_FinMath/files/8102300/Projet.Maths.fi.pdf)
 
-Data: 
+[data_gp17.xlsx](https://github.com/draialexis/Py_FinMath/files/8102301/Projet17.xlsx)
