@@ -18,6 +18,6 @@ def init_var_glob():
     revente = 1040
     # les bénéfices réalisés en fin d'année
     global benefices
-    benefices = [6100, 6400, 4300, 200, 4900, 4400, 1500]
+    benefices = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
 
 # 2)
