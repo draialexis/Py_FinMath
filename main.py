@@ -5,16 +5,21 @@ import openpyxl
 global DUREE
 # l'investissement, en début de projet
 global INVESTISSEMENT
-# le prix de revente du matériel, en fin de projet
-global REVENTE
 # les bénéfices réalisés en fin d'année
 global BENEFICES
+# le prix de revente du matériel, en fin de projet
+global REVENTE
 
 
 # 2)
 
+def increment_char(char):
+    b = bytes(char, 'utf-8')
+    b = b[0] + 1
+    return chr(b)
+
+
 def lecture_donnees(in_donnees_xlsx):
-    # TODO implement function for real
     wb = openpyxl.load_workbook(in_donnees_xlsx)
     sheet = wb.active
 
@@ -28,14 +33,12 @@ def lecture_donnees(in_donnees_xlsx):
     BENEFICES = []
     char = "B"
     for i in range(DUREE):
-        b = bytes(char, 'utf-8')
-        b = b[0] + 1
-        char = chr(b)
-        # print(char)
+        char = increment_char(char)
         BENEFICES.append(sheet[char + "4"].value)
 
+    char = increment_char(char)
     global REVENTE
-    REVENTE = sheet["J4"].value
+    REVENTE = sheet[char + "4"].value
 
 
 # 3)
@@ -89,8 +92,14 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
 # 6)
 
 def affichage_resultat(t_ri):
-    print(t_ri)
-    # TODO implement function for real
+    print("\nnombre de periodes : " + str(DUREE))
+    print("investissement de depart : " + str(-INVESTISSEMENT))
+    print("benefices : " + str(BENEFICES))
+    print("valeur de revente de l'equipement : " + str(REVENTE))
+    print("\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    print("taux de rendement interne du projet : " + str(t_ri))
+    print("soit " + str(round((t_ri * 100), 2)) + "%")
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 
 lecture_donnees('Projet17.xlsx')
