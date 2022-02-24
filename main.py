@@ -1,20 +1,41 @@
+import openpyxl
+
 # 1)
 # la durée considérée pour le projet, en années
-global duree
+global DUREE
 # l'investissement, en début de projet
-global investissement
+global INVESTISSEMENT
 # le prix de revente du matériel, en fin de projet
-global revente
+global REVENTE
 # les bénéfices réalisés en fin d'année
-global benefices
+global BENEFICES
 
 
 # 2)
 
-def lecture_donnees():
-    print("Looks like we're gonna need pandas")
-    # https://www.sitepoint.com/using-python-parse-spreadsheet-data/
+def lecture_donnees(in_donnees_xlsx):
     # TODO implement function for real
+    wb = openpyxl.load_workbook(in_donnees_xlsx)
+    sheet = wb.active
+
+    global DUREE
+    DUREE = sheet["B2"].value
+
+    global INVESTISSEMENT
+    INVESTISSEMENT = sheet["B4"].value
+
+    global BENEFICES
+    BENEFICES = []
+    char = "B"
+    for i in range(DUREE):
+        b = bytes(char, 'utf-8')
+        b = b[0] + 1
+        char = chr(b)
+        # print(char)
+        BENEFICES.append(sheet[char + "4"].value)
+
+    global REVENTE
+    REVENTE = sheet["J4"].value
 
 
 # 3)
@@ -23,17 +44,18 @@ def calcul_van(in_taux):
     if in_taux < 0:
         exit("calcul_VAN(): some error message")
 
-    van = investissement
-    for i, benefice in enumerate(benefices):
+    van = INVESTISSEMENT
+    for i, benefice in enumerate(BENEFICES):
         van = van + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
 
-    van = van + (revente / pow(1 + in_taux, duree))
+    van = van + (REVENTE / pow(1 + in_taux, DUREE))
     return van
 
 
 # 4)
 
 def init_dicho(in_epsilon):
+    # validation function
     print("not today!")
 
     in_t_max = in_t_min = 0.0
@@ -67,5 +89,16 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
 # 6)
 
 def affichage_resultat(t_ri):
-    print("we'll figure something out..." + t_ri)
+    print(t_ri)
     # TODO implement function for real
+
+
+lecture_donnees('Projet17.xlsx')
+res = dichotomie(0, 1, 0.0001)
+affichage_resultat(res)
+"""
+epsilon = 0.0001, suggéré
+
+Le rapport, au format pdf, contiendra la partie théorique, la description algorithmique des procédures
+programmées et le résultat obtenu sur les données.
+"""
