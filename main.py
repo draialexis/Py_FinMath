@@ -58,10 +58,9 @@ def calcul_van(in_taux):
 # 4)
 
 def init_dicho(in_epsilon):
-    # validation function
-    print("not today!")
+    # oooh this is a validation function
 
-    in_t_max = in_t_min = 0.0
+    in_t_max = in_t_min = 0.0  # initialized with nonsense values
     if in_epsilon >= 1.0:
         exit("init_dicho(): some error message")
 
