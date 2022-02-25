@@ -91,17 +91,19 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
 # 6)
 
 def affichage_resultat(t_ri):
-    print("\nnombre de periodes : " + str(DUREE))
-    print("investissement de depart : " + str(-INVESTISSEMENT))
-    print("benefices : " + str(BENEFICES))
-    print("valeur de revente de l'equipement : " + str(REVENTE))
+
+    print("\nnombre de periodes (n) : " + str(DUREE))
+    print("premier flux (I) : " + str(INVESTISSEMENT))
+    print("benefices (B_i) : " + str(BENEFICES))
+    print("valeur de revente de l'equipement (V) : " + str(REVENTE))
+
     print("\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    print("taux de rendement interne du projet : " + str(t_ri))
+    print("taux de rendement interne du projet (t_ri) : " + str(t_ri))
     print("soit " + str(round((t_ri * 100), 2)) + "%")
     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 
-lecture_donnees('Projet17.xlsx')
+lecture_donnees('gp17_data.xlsx')
 res = dichotomie(0, 1, 0.0001)
 affichage_resultat(res)
 """
