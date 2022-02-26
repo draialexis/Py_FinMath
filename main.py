@@ -20,6 +20,7 @@ def increment_char(char):
 
 
 def lecture_donnees(in_donnees_xlsx):
+    # TODO add validation for xlsx file existing / having data
     wb = openpyxl.load_workbook(in_donnees_xlsx)
     sheet = wb.active
 
@@ -45,7 +46,7 @@ def lecture_donnees(in_donnees_xlsx):
 
 def calcul_van(in_taux):
     if in_taux < 0:
-        exit("calcul_VAN(): some error message")
+        exit("calcul_VAN(): taux < 0 INVALIDE ( in_taux =" + str(in_taux) + ")")
 
     van = INVESTISSEMENT
     for i, benefice in enumerate(BENEFICES):
@@ -62,7 +63,7 @@ def init_dicho(in_epsilon):
 
     in_t_max = in_t_min = 0.0  # initialized with nonsense values
     if in_epsilon >= 1.0:
-        exit("init_dicho(): some error message")
+        exit("init_dicho(): epsilon >= 1 INVALIDE ( in_epsilon =" + str(in_epsilon) + ")")
 
     # TODO implement function for real
     return in_t_max, in_t_min
@@ -71,7 +72,7 @@ def init_dicho(in_epsilon):
 # 5)
 
 def dichotomie(in_t_max, in_t_min, in_epsilon):
-    # all conditions will be verified by init_dicho
+    # TODO verify all conditions using init_dicho()
     t_ri = 0.0
     arret = False
     while not arret:
@@ -91,7 +92,6 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
 # 6)
 
 def affichage_resultat(t_ri):
-
     print("\nnombre de periodes (n) : " + str(DUREE))
     print("premier flux (I) : " + str(INVESTISSEMENT))
     print("benefices (B_i) : " + str(BENEFICES))
@@ -103,12 +103,8 @@ def affichage_resultat(t_ri):
     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 
-lecture_donnees('gp17_data.xlsx')
-res = dichotomie(0, 1, 0.0001)
-affichage_resultat(res)
-"""
-epsilon = 0.0001, suggéré
+# TEST
 
-Le rapport, au format pdf, contiendra la partie théorique, la description algorithmique des procédures
-programmées et le résultat obtenu sur les données.
-"""
+lecture_donnees('gp17_data.xlsx')
+res = dichotomie(0, 1, 0.0001)  # epsilon = 0.0001, suggéré
+affichage_resultat(res)
