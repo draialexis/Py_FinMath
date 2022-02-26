@@ -87,8 +87,6 @@ def init_dicho(in_t_min, in_t_max):
             or in_t_max <= in_t_min:
         exit("dichotomie(): la question du TRI ne s'applique pas à ces données")
 
-    return True
-
 
 # 5)
 
