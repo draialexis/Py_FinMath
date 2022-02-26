@@ -47,7 +47,7 @@ def lecture_donnees(in_donnees_xlsx):
 
         REVENTE = sheet[char + "4"].value
 
-    else:  # si le fichier est introuivable, on utilise des données hardcoded correspondant au groupe 17
+    else:  # si le fichier est introuvable, on utilise des données hardcoded correspondant au groupe 17
         DUREE = 7
         INIT_FLUX = -10400
         BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
@@ -56,6 +56,7 @@ def lecture_donnees(in_donnees_xlsx):
 
 # 3)
 
+# on applique la formule du calcul de la VAN
 def calcul_van(in_taux):
     if in_taux < 0:
         exit("calcul_VAN(): taux < 0 INVALIDE ( in_taux =" + str(in_taux) + ")")
@@ -70,6 +71,7 @@ def calcul_van(in_taux):
 
 # 4)
 
+# procedure de validation des données du projet
 def init_dicho(in_t_min, in_t_max):
     profits = 0.0
 
@@ -90,14 +92,13 @@ def init_dicho(in_t_min, in_t_max):
 
 # 5)
 
+# suivi exact de la procédure à l'algo 5
+# diviser pour regner, convergence rapide vers l'objectif...
 def dichotomie(in_t_min, in_t_max, in_epsilon):
     init_dicho(in_t_min, in_t_max)
     # validation grace à init_dicho
     t_ri = 0.0
     arret = False
-    # suivi exact de la procédure à l'algo 5
-    # diviser pour regner, O(n.log(n))
-    # decrire la demarche d'une recherche dichotomique, convergence vers l'objectif...
     while not arret:
         t_c = (in_t_max + in_t_min) / 2
         van_c = calcul_van(t_c)
