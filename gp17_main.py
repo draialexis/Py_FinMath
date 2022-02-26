@@ -29,7 +29,7 @@ def lecture_donnees(in_donnees_xlsx):
     global BENEFICES
     global REVENTE
 
-    if path.exists(in_donnees_xlsx):
+    if path.exists(in_donnees_xlsx):  # si le fichier existe, on peut exploiter les données
         wb = openpyxl.load_workbook(in_donnees_xlsx)
         sheet = wb.active
 
@@ -44,10 +44,9 @@ def lecture_donnees(in_donnees_xlsx):
             BENEFICES.append(sheet[char + "4"].value)
 
         char = increment_char(char)
-
         REVENTE = sheet[char + "4"].value
 
-    else:  # si le fichier est introuvable, on utilise des données hardcoded correspondant au groupe 17
+    else:  # si le fichier est introuvable, on utilise les données en dur correspondantes au groupe 17 par défaut
         DUREE = 7
         INIT_FLUX = -10400
         BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
@@ -78,14 +77,16 @@ def init_dicho(in_t_min, in_t_max):
     for flow in BENEFICES:
         profits += flow
 
-    # le projet est profitable en theorie
+    # on vérifie que :
+    # le projet est profitable en théorie
     # le flux initial est bien négatif
-    # le taux minimum initial de dicho n'est pas négatif (VAN(t) est définie sur R+, pas R)
+    # le taux minimum initial de dicho n'est pas négatif (VAN(t) est définie sur R+, pas sur tout R)
+    # le taux minimum initial est bien strictement inférieur au taux maximum initial
     if profits + INIT_FLUX < 0 \
             or INIT_FLUX > 0 \
             or in_t_min < 0 \
             or in_t_max <= in_t_min:
-        exit("dichotomie(): la question du TRI ne s'applique pas à ces données")
+        exit("init_dicho(): la question du TRI ne s'applique pas à ces données")
 
 
 # 5)
@@ -93,8 +94,8 @@ def init_dicho(in_t_min, in_t_max):
 # suivi exact de la procédure à l'algo 5
 # diviser pour regner, convergence rapide vers l'objectif...
 def dichotomie(in_t_min, in_t_max, in_epsilon):
-    init_dicho(in_t_min, in_t_max)
-    # validation grace à init_dicho
+    init_dicho(in_t_min, in_t_max)  # validation grace à init_dicho
+
     t_ri = 0.0
     arret = False
     while not arret:
