@@ -1,3 +1,5 @@
+from os import path
+
 import openpyxl
 
 # 1)
@@ -22,26 +24,34 @@ def increment_char(char):
 
 # on suppose que les fichers xlsx suivent tous le même format
 def lecture_donnees(in_donnees_xlsx):
-    # TODO add validation for xlsx file existing / having data
-    wb = openpyxl.load_workbook(in_donnees_xlsx)
-    sheet = wb.active
-
     global DUREE
-    DUREE = sheet["B2"].value
-
     global INIT_FLUX
-    INIT_FLUX = sheet["B4"].value
-
     global BENEFICES
-    BENEFICES = []
-    char = "B"
-    for i in range(DUREE):
-        char = increment_char(char)
-        BENEFICES.append(sheet[char + "4"].value)
-
-    char = increment_char(char)
     global REVENTE
-    REVENTE = sheet[char + "4"].value
+
+    if path.exists(in_donnees_xlsx):
+        wb = openpyxl.load_workbook(in_donnees_xlsx)
+        sheet = wb.active
+
+        DUREE = sheet["B2"].value
+
+        INIT_FLUX = sheet["B4"].value
+
+        BENEFICES = []
+        char = "B"
+        for i in range(DUREE):
+            char = increment_char(char)
+            BENEFICES.append(sheet[char + "4"].value)
+
+        char = increment_char(char)
+
+        REVENTE = sheet[char + "4"].value
+
+    else:  # si le fichier est introuivable, on utilise des données hardcoded correspondant au groupe 17
+        DUREE = 7
+        INIT_FLUX = -10400
+        BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
+        REVENTE = 1040
 
 
 # 3)
