@@ -4,7 +4,7 @@ import openpyxl
 # la durée considérée pour le projet, en années
 global DUREE
 # l'investissement, en début de projet
-global INVESTISSEMENT
+global INIT_FLUX
 # les bénéfices réalisés en fin d'année
 global BENEFICES
 # le prix de revente du matériel, en fin de projet
@@ -13,12 +13,14 @@ global REVENTE
 
 # 2)
 
+# fonction annexe pour incrémenter le premier charactere d'un string de 1 char (B4 -> C4, etc.)
 def increment_char(char):
     b = bytes(char, 'utf-8')
     b = b[0] + 1
     return chr(b)
 
 
+# on suppose que les fichers xlsx suivent tous le même format
 def lecture_donnees(in_donnees_xlsx):
     # TODO add validation for xlsx file existing / having data
     wb = openpyxl.load_workbook(in_donnees_xlsx)
@@ -27,8 +29,8 @@ def lecture_donnees(in_donnees_xlsx):
     global DUREE
     DUREE = sheet["B2"].value
 
-    global INVESTISSEMENT
-    INVESTISSEMENT = sheet["B4"].value
+    global INIT_FLUX
+    INIT_FLUX = sheet["B4"].value
 
     global BENEFICES
     BENEFICES = []
@@ -48,7 +50,7 @@ def calcul_van(in_taux):
     if in_taux < 0:
         exit("calcul_VAN(): taux < 0 INVALIDE ( in_taux =" + str(in_taux) + ")")
 
-    van = INVESTISSEMENT
+    van = INIT_FLUX
     for i, benefice in enumerate(BENEFICES):
         van = van + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
 
@@ -58,30 +60,41 @@ def calcul_van(in_taux):
 
 # 4)
 
-def init_dicho(in_epsilon):
-    # oooh this is a validation function
+def init_dicho(in_t_min, in_t_max):
+    profits = 0.0
 
-    in_t_max = in_t_min = 0.0  # initialized with nonsense values
-    if in_epsilon >= 1.0:
-        exit("init_dicho(): epsilon >= 1 INVALIDE ( in_epsilon =" + str(in_epsilon) + ")")
+    for flow in BENEFICES:
+        profits += flow
 
-    # TODO implement function for real
-    return in_t_max, in_t_min
+    # le projet est profitable en theorie
+    # le flux initial est bien négatif
+    # le taux minimum initial de dicho n'est pas négatif (VAN(t) est définie sur R+, pas R)
+    if profits + INIT_FLUX < 0 \
+            or INIT_FLUX > 0 \
+            or in_t_min < 0 \
+            or in_t_max <= in_t_min:
+        exit("dichotomie(): la question du TRI ne s'applique pas à ces données")
+
+    return True
 
 
 # 5)
 
-def dichotomie(in_t_max, in_t_min, in_epsilon):
-    # TODO verify all conditions using init_dicho()
+def dichotomie(in_t_min, in_t_max, in_epsilon):
+    init_dicho(in_t_min, in_t_max)
+    # validation grace à init_dicho
     t_ri = 0.0
     arret = False
+    # suivi exact de la procédure à l'algo 5
+    # diviser pour regner, O(n.log(n))
+    # decrire la demarche d'une recherche dichotomique, convergence vers l'objectif...
     while not arret:
         t_c = (in_t_max + in_t_min) / 2
         van_c = calcul_van(t_c)
         if van_c >= in_epsilon:
-            in_t_max = t_c
-        elif van_c <= - in_epsilon:
             in_t_min = t_c
+        elif van_c <= - in_epsilon:
+            in_t_max = t_c
         else:
             t_ri = t_c
             arret = True
@@ -93,7 +106,7 @@ def dichotomie(in_t_max, in_t_min, in_epsilon):
 
 def affichage_resultat(t_ri):
     print("\nnombre de periodes (n) : " + str(DUREE))
-    print("premier flux (I) : " + str(INVESTISSEMENT))
+    print("premier flux (I) : " + str(INIT_FLUX))
     print("benefices (B_i) : " + str(BENEFICES))
     print("valeur de revente de l'equipement (V) : " + str(REVENTE))
 
@@ -106,5 +119,4 @@ def affichage_resultat(t_ri):
 # TEST
 
 lecture_donnees('gp17_data.xlsx')
-res = dichotomie(0, 1, 0.0001)  # epsilon = 0.0001, suggéré
-affichage_resultat(res)
+affichage_resultat(dichotomie(0, 1, 0.0001))  # epsilon = 0.0001, suggéré
