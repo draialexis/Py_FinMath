@@ -2,4 +2,6 @@
 
 [instructions.pdf](https://github.com/draialexis/Py_FinMath/files/8102300/Projet.Maths.fi.pdf)
 
-[data_gp17.xlsx](https://github.com/draialexis/Py_FinMath/files/8102301/Projet17.xlsx)
+[gp17_data.xlsx](https://github.com/draialexis/Py_FinMath/files/8148261/gp17_data.xlsx)
+
+[math_and_expected_results.pdf](https://github.com/draialexis/Py_FinMath/files/8148274/gp17_rapport.pdf)
