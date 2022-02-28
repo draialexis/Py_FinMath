@@ -2,7 +2,12 @@ from os import path
 
 import openpyxl
 
+epsilon = 0.0001
+t_min = 0.0
+t_max = 1.0
+
 # 1)
+
 # la durée considérée pour le projet, en années
 global DUREE
 # l'investissement, en début de projet
@@ -114,19 +119,23 @@ def dichotomie(in_t_min, in_t_max, in_epsilon):
 
 # 6)
 
-def affichage_resultat(t_ri):
+def affichage_resultat(in_t_min, in_t_max, in_epsilon, in_t_ri):
     print("\nnombre de periodes (n) : " + str(DUREE))
     print("premier flux (I) : " + str(INIT_FLUX))
     print("benefices (B_i) : " + str(BENEFICES))
     print("valeur de revente de l'equipement (V) : " + str(REVENTE))
+    print("\n[INFO] les bornes et l'epsilon peuvent etre modifies en dur, aux lignes 5, 6, et 7")
 
     print("\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    print("taux de rendement interne du projet (t_ri) : " + str(t_ri))
-    print("soit " + str(round((t_ri * 100), 2)) + "%")
+    print("taux - borne inferieure : " + str(in_t_min) + " ; borne superieure : " + str(in_t_max))
+    print("epsilon : " + str(in_epsilon))
+    print("taux de rendement interne du projet : " + str(in_t_ri))
+    print("soit " + str(round((in_t_ri * 100), 2)) + "%")
     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 
 # TEST
 
 lecture_donnees('gp17_data.xlsx')
-affichage_resultat(dichotomie(0, 1, 0.0001))  # epsilon = 0.0001, suggéré
+resultat = dichotomie(t_min, t_max, epsilon)
+affichage_resultat(t_min, t_max, epsilon, resultat)
