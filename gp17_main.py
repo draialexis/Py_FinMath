@@ -1,10 +1,9 @@
-from os import path
-
 import openpyxl
 
 epsilon = 0.0001
 t_min = 0.0
 t_max = 1.0
+nom_fichier = "gp17_data.xlsx"
 
 # 1)
 
@@ -34,7 +33,7 @@ def lecture_donnees(in_donnees_xlsx):
     global BENEFICES
     global REVENTE
 
-    if path.exists(in_donnees_xlsx):  # si le fichier existe, on peut exploiter les données
+    try:  # si le fichier existe, on peut exploiter les données
         wb = openpyxl.load_workbook(in_donnees_xlsx)
         sheet = wb.active
 
@@ -51,7 +50,13 @@ def lecture_donnees(in_donnees_xlsx):
         char = increment_char(char)
         REVENTE = sheet[char + "4"].value
 
-    else:  # si le fichier est introuvable, on utilise les données en dur correspondantes au groupe 17 par défaut
+        wb.close()
+
+    # si le fichier est introuvable, on utilise en dur les données correspondant au groupe 17 par défaut
+    except FileNotFoundError:
+        print("\n[WARNING] le fichier "
+              + in_donnees_xlsx +
+              " est introuvable, donc init_dicho() utilise en dur les donnees correspondant au groupe 17 par defaut.")
         DUREE = 7
         INIT_FLUX = -10400
         BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
@@ -124,7 +129,7 @@ def affichage_resultat(in_t_min, in_t_max, in_epsilon, in_t_ri):
     print("premier flux (I) : " + str(INIT_FLUX))
     print("benefices (B_i) : " + str(BENEFICES))
     print("valeur de revente de l'equipement (V) : " + str(REVENTE))
-    print("\n[INFO] les bornes et l'epsilon peuvent etre modifies en dur, aux lignes 5, 6, et 7")
+    print("\n[INFO] les bornes et l'epsilon peuvent etre modifies en dur, aux lignes 3, 4, et 5")
 
     print("\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
     print("taux - borne inferieure : " + str(in_t_min) + " ; borne superieure : " + str(in_t_max))
@@ -136,6 +141,6 @@ def affichage_resultat(in_t_min, in_t_max, in_epsilon, in_t_ri):
 
 # TEST
 
-lecture_donnees('gp17_data.xlsx')
+lecture_donnees(nom_fichier)
 resultat = dichotomie(t_min, t_max, epsilon)
 affichage_resultat(t_min, t_max, epsilon, resultat)
