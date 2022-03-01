@@ -23,6 +23,7 @@ global INIT_FLUX
 global BENEFICES
 # le prix de revente du matériel, en fin de projet
 global REVENTE
+REVENTE = 0
 
 
 # 2)
