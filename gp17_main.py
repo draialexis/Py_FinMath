@@ -1,4 +1,12 @@
-import openpyxl
+is_module_present = True
+
+try:
+    import openpyxl
+except ModuleNotFoundError:
+    print("[WARNING] Vous n'avez pas le module 'openpyxl' sur cette machine -- \n"
+          "entrer `pip install openpyxl` peut resoudre ce probleme, si vous avez deja l'installeur python ('pip')\n"
+          "des valeurs par defaut doivent etre utilisees a la place du fichier excel")
+    is_module_present = False
 
 epsilon = 0.0001
 t_min = 0.0
@@ -20,10 +28,21 @@ global REVENTE
 # 2)
 
 # fonction annexe pour incrémenter le premier charactere d'un string de 1 char (B4 -> C4, etc.)
-def increment_char(char):
-    b = bytes(char, 'utf-8')
+def increment_char(in_char):
+    b = bytes(in_char, 'utf-8')
     b = b[0] + 1
     return chr(b)
+
+
+def pop_def_global_vars():
+    global DUREE
+    global INIT_FLUX
+    global BENEFICES
+    global REVENTE
+    DUREE = 7
+    INIT_FLUX = -10400
+    BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
+    REVENTE = 1040
 
 
 # on suppose que les fichers xlsx suivent tous le même format
@@ -32,6 +51,11 @@ def lecture_donnees(in_donnees_xlsx):
     global INIT_FLUX
     global BENEFICES
     global REVENTE
+
+    if not is_module_present:
+        # sans le module openpyxl, on doit utiliser les valeurs par défaut en dur et sortir de la procedure
+        pop_def_global_vars()
+        return
 
     try:  # si le fichier existe, on peut exploiter les données
         wb = openpyxl.load_workbook(in_donnees_xlsx)
@@ -53,14 +77,12 @@ def lecture_donnees(in_donnees_xlsx):
         wb.close()
 
     # si le fichier est introuvable, on utilise en dur les données correspondant au groupe 17 par défaut
+
     except FileNotFoundError:
         print("\n[WARNING] le fichier "
               + in_donnees_xlsx +
               " est introuvable, donc init_dicho() utilise en dur les donnees correspondant au groupe 17 par defaut.")
-        DUREE = 7
-        INIT_FLUX = -10400
-        BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
-        REVENTE = 1040
+        pop_def_global_vars()
 
 
 # 3)
