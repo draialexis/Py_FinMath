@@ -5,7 +5,7 @@ try:
 except ModuleNotFoundError:
     print("[WARNING] Vous n'avez pas le module 'openpyxl' sur cette machine -- \n"
           "entrer `pip install openpyxl` peut resoudre ce probleme, si vous avez deja l'installeur python ('pip')\n"
-          "des valeurs par defaut doivent etre utilisees a la place du fichier excel")
+          "pour le moment, des valeurs par defaut doivent etre utilisees a la place du fichier excel")
     is_module_present = False
 
 epsilon = 0.0001
