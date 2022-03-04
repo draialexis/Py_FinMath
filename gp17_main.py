@@ -1,17 +1,7 @@
-is_module_present = True
-
-try:
-    import openpyxl
-except ModuleNotFoundError:
-    print("[WARNING] Vous n'avez pas le module 'openpyxl' sur cette machine -- \n"
-          "entrer `pip install openpyxl` peut resoudre ce probleme, si vous avez deja l'installeur python ('pip')\n"
-          "pour le moment, des valeurs par defaut doivent etre utilisees a la place du fichier excel")
-    is_module_present = False
-
 epsilon = 0.0001
 t_min = 0.0
 t_max = 1.0
-nom_fichier = "gp17_data.xlsx"
+nom_fichier = "gp17_data.txt"
 
 # 1)
 
@@ -28,23 +18,6 @@ REVENTE = 0
 
 # 2)
 
-# fonction annexe pour incrémenter le premier charactere d'un string de 1 char (B4 -> C4, etc.)
-def increment_char(in_char):
-    b = bytes(in_char, 'utf-8')
-    b = b[0] + 1
-    return chr(b)
-
-
-def pop_def_global_vars():
-    global DUREE
-    global INIT_FLUX
-    global BENEFICES
-    global REVENTE
-    DUREE = 7
-    INIT_FLUX = -10400
-    BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
-    REVENTE = 1040
-
 
 # on suppose que les fichers xlsx suivent tous le même format
 def lecture_donnees(in_donnees_xlsx):
@@ -53,29 +26,16 @@ def lecture_donnees(in_donnees_xlsx):
     global BENEFICES
     global REVENTE
 
-    if not is_module_present:
-        # sans le module openpyxl, on doit utiliser les valeurs par défaut en dur et sortir de la procedure
-        pop_def_global_vars()
-        return
-
     try:  # si le fichier existe, on peut exploiter les données
-        wb = openpyxl.load_workbook(in_donnees_xlsx)
-        sheet = wb.active
-
-        DUREE = sheet["B2"].value
-
-        INIT_FLUX = sheet["B4"].value
-
-        BENEFICES = []
-        char = "B"
-        for i in range(DUREE):
-            char = increment_char(char)
-            BENEFICES.append(sheet[char + "4"].value)
-
-        char = increment_char(char)
-        REVENTE = sheet[char + "4"].value
-
-        wb.close()
+        with open(in_donnees_xlsx) as f:
+            for line_num, line in enumerate(f):
+                if line_num == 0:
+                    DUREE = int(line.strip())
+                if line_num == 2:
+                    data = line.strip().split(";")
+                    INIT_FLUX = int(data.pop(0))  # on retire le premier element et on copie sa valeur dans init_flux
+                    REVENTE = int(data.pop())  # on retire le dernier element et on copie sa valeur dans revente
+                    BENEFICES = [int(i) for i in data]  # le reste de la liste sont les bénéfices de t=1 à t=n
 
     # si le fichier est introuvable, on utilise en dur les données correspondant au groupe 17 par défaut
 
@@ -83,7 +43,10 @@ def lecture_donnees(in_donnees_xlsx):
         print("\n[WARNING] le fichier "
               + in_donnees_xlsx +
               " est introuvable, donc init_dicho() utilise en dur les donnees correspondant au groupe 17 par defaut.")
-        pop_def_global_vars()
+        DUREE = 7
+        INIT_FLUX = -10400
+        BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
+        REVENTE = 1040
 
 
 # 3)
@@ -107,8 +70,8 @@ def calcul_van(in_taux):
 def init_dicho(in_t_min, in_t_max):
     profits = 0.0
 
-    for flow in BENEFICES:
-        profits += flow
+    for flux in BENEFICES:
+        profits += flux
 
     # on vérifie que :
     # le projet est profitable en théorie
