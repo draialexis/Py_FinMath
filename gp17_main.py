@@ -5,7 +5,7 @@ t_min = 0.0
 t_max = 1.0
 nom_fichier = "gp17_data.txt"
 
-decimals = -1 * int(log10(epsilon))
+decimals = -1 * int(log10(epsilon))  # La précision qu'on peut demander à l'affichage
 
 #   1)
 
