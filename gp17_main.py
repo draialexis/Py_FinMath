@@ -1,6 +1,7 @@
-
+from math import log10
 
 epsilon = 0.0001
+decimals = -1 * int(log10(epsilon))
 t_min = 0.0
 t_max = 1.0
 nom_fichier = "gp17_data.txt"
@@ -149,10 +150,9 @@ def affichage_resultat(in_t_min, in_t_max, in_epsilon, in_t_ri):
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("  Taux : borne inferieure = ( " + str(in_t_min) + " ) ; borne superieure = ( " + str(in_t_max) + " )")
     print("  Epsilon : " + str(in_epsilon))
-    print("  Taux de rendement interne du projet : " + str(in_t_ri))
-    print("  Soit " + str(round((in_t_ri * 100), 2)) + "%")
+    print("  Taux de rendement interne du projet : " + str(round(in_t_ri, decimals)))
+    print("  Soit " + str(round((in_t_ri * 100), decimals - 2)) + "%")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
 
 # TEST
 
