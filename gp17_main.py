@@ -1,11 +1,11 @@
 from math import log10
 
 epsilon = 0.0001
-decimals = -1 * int(log10(epsilon))
 t_min = 0.0
 t_max = 1.0
 nom_fichier = "gp17_data.txt"
 
+decimals = -1 * int(log10(epsilon))
 
 #   1)
 
