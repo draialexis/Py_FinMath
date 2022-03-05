@@ -1,6 +1,6 @@
 from math import log10
 
-epsilon = 0.0001
+epsilon = 0.00001
 t_min = 0.0
 t_max = 1.0
 nom_fichier = "gp17_data.txt"
