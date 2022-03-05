@@ -91,7 +91,7 @@ def init_dicho(in_t_min, in_t_max):
 
     for flux in BENEFICES:
         profits += flux
-
+    profits += REVENTE
 
     # On vérifie que :
     # le projet est profitable en théorie
