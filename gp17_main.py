@@ -1,23 +1,23 @@
 from math import log10
 
-epsilon = 0.00001
-t_min = 0.0
-t_max = 1.0
-nom_fichier = "gp17_data.txt"
+EPSILON = 0.00001
+T_MIN = 0.0
+T_MAX = 1.0
+NOM_FICHIER = "gp17_data.txt"
 
-decimals = -1 * int(log10(epsilon))  # La précision qu'on peut demander à l'affichage
+DECIMALS = -1 * int(log10(EPSILON))  # La précision qu'on peut demander à l'affichage
 
 #   1)
 
 # La durée considérée pour le projet, en années
-global DUREE
+global duree
 # L'investissement, en début de projet
-global INIT_FLUX
-# Les bénéfices réalisés en fin d'année
-global BENEFICES
+global init_flux
 # Le prix de revente du matériel, en fin de projet
-global REVENTE
-REVENTE = 0
+global revente
+revente = 0
+# Les bénéfices réalisés en fin d'année
+global benefices
 
 
 
@@ -27,10 +27,10 @@ REVENTE = 0
 # On suppose que les fichers de donnees suivent tous le même format
 def lecture_donnees(in_donnees):
 
-    global DUREE
-    global INIT_FLUX
-    global BENEFICES
-    global REVENTE
+    global duree
+    global init_flux
+    global benefices
+    global revente
 
 
     try:  # si le fichier existe, on peut exploiter les données
@@ -38,13 +38,13 @@ def lecture_donnees(in_donnees):
             for line_num, line in enumerate(f):
 
                 if line_num == 0:
-                    DUREE = int(line.strip())
+                    duree = int(line.strip())
 
                 if line_num == 2:
                     data = line.strip().split(";")
-                    INIT_FLUX = int(data.pop(0))  # on retire le premier element et on copie sa valeur dans init_flux
-                    REVENTE = int(data.pop())  # on retire le dernier element et on copie sa valeur dans revente
-                    BENEFICES = [int(i) for i in data]  # le reste de la liste sont les bénéfices de t=1 à t=n
+                    init_flux = int(data.pop(0))  # on retire le premier element et on copie sa valeur dans init_flux
+                    revente = int(data.pop())  # on retire le dernier element et on copie sa valeur dans revente
+                    benefices = [int(i) for i in data]  # le reste de la liste sont les bénéfices de t=1 à t=n
 
     # si le fichier est introuvable, on utilise en dur les données correspondant au groupe 17 par défaut
 
@@ -55,10 +55,10 @@ def lecture_donnees(in_donnees):
               + in_donnees +
               " est introuvable, donc init_dicho() utilise en dur les donnees correspondant au groupe 17 par defaut.")
 
-        DUREE = 7
-        INIT_FLUX = -10400
-        BENEFICES = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
-        REVENTE = 1040
+        duree = 7
+        init_flux = -10400
+        benefices = [6100, 6400, 4300, 2000, 4900, 4400, 1500]
+        revente = 1040
 
 
 
@@ -71,12 +71,12 @@ def calcul_van(in_taux):
     if in_taux < 0:
         exit(" calcul_VAN(): taux < 0 INVALIDE ( in_taux =" + str(in_taux) + ")")
 
-    van = INIT_FLUX
+    van = init_flux
 
-    for i, benefice in enumerate(BENEFICES):
+    for i, benefice in enumerate(benefices):
         van = van + (benefice / pow(1 + in_taux, i + 1))  # attention, i est 0-indexé...
 
-    van = van + (REVENTE / pow(1 + in_taux, DUREE))
+    van = van + (revente / pow(1 + in_taux, duree))
 
     return van
 
@@ -90,9 +90,9 @@ def init_dicho(in_t_min, in_t_max):
 
     profits = 0.0
 
-    for flux in BENEFICES:
+    for flux in benefices:
         profits += flux
-    profits += REVENTE
+    profits += revente
 
     # On vérifie que :
     # le projet est profitable en théorie
@@ -100,8 +100,8 @@ def init_dicho(in_t_min, in_t_max):
     # le taux minimum initial de dicho n'est pas négatif (VAN(t) est définie sur R+, pas sur tout R)
     # le taux minimum initial est bien strictement inférieur au taux maximum initial
 
-    if profits + INIT_FLUX < 0 \
-            or INIT_FLUX > 0 \
+    if profits + init_flux < 0 \
+            or init_flux > 0 \
             or in_t_min < 0 \
             or in_t_max <= in_t_min:
         exit("init_dicho(): la question du TRI ne s'applique pas à ces données")
@@ -141,21 +141,21 @@ def dichotomie(in_t_min, in_t_max, in_epsilon):
 #   6)
 
 def affichage_resultat(in_t_min, in_t_max, in_epsilon, in_t_ri):
-    print("\n  Nombre de periodes (n) : " + str(DUREE))
-    print("  Premier flux (I) : " + str(INIT_FLUX))
-    print("  Benefices (B_i) : " + str(BENEFICES))
-    print("  Valeur de revente de l'equipement (V) : " + str(REVENTE))
+    print("\n  Nombre de periodes (n) : " + str(duree))
+    print("  Premier flux (I) : " + str(init_flux))
+    print("  Benefices (B_i) : " + str(benefices))
+    print("  Valeur de revente de l'equipement (V) : " + str(revente))
     print("\n [INFO] les bornes et l'epsilon peuvent etre modifies en dur, aux lignes 3, 4, et 5")
 
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("  Taux : borne inferieure = ( " + str(in_t_min) + " ) ; borne superieure = ( " + str(in_t_max) + " )")
     print("  Epsilon : " + str(in_epsilon))
-    print("  Taux de rendement interne du projet : " + str(round(in_t_ri, decimals)))
-    print("  Soit " + str(round((in_t_ri * 100), decimals - 2)) + "%")
+    print("  Taux de rendement interne du projet : " + str(round(in_t_ri, DECIMALS)))
+    print("  Soit " + str(round((in_t_ri * 100), DECIMALS - 2)) + "%")
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 # TEST
 
-lecture_donnees(nom_fichier)
-resultat = dichotomie(t_min, t_max, epsilon)
-affichage_resultat(t_min, t_max, epsilon, resultat)
+lecture_donnees(NOM_FICHIER)
+resultat = dichotomie(T_MIN, T_MAX, EPSILON)
+affichage_resultat(T_MIN, T_MAX, EPSILON, resultat)
