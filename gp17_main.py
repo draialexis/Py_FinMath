@@ -24,8 +24,8 @@ REVENTE = 0
 
 #   2)
 
-# On suppose que les fichers xlsx suivent tous le même format
-def lecture_donnees(in_donnees_xlsx):
+# On suppose que les fichers de donnees suivent tous le même format
+def lecture_donnees(in_donnees):
 
     global DUREE
     global INIT_FLUX
@@ -34,7 +34,7 @@ def lecture_donnees(in_donnees_xlsx):
 
 
     try:  # si le fichier existe, on peut exploiter les données
-        with open(in_donnees_xlsx) as f:
+        with open(in_donnees) as f:
             for line_num, line in enumerate(f):
 
                 if line_num == 0:
@@ -52,7 +52,7 @@ def lecture_donnees(in_donnees_xlsx):
     except FileNotFoundError:
 
         print("\n [WARNING] le fichier "
-              + in_donnees_xlsx +
+              + in_donnees +
               " est introuvable, donc init_dicho() utilise en dur les donnees correspondant au groupe 17 par defaut.")
 
         DUREE = 7
